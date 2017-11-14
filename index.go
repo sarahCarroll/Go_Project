@@ -1,5 +1,7 @@
 //Author- Sarah Carroll
 // https://golang.org/doc/articles/wiki/
+//https://astaxie.gitbooks.io/build-web-application-with-golang/en/04.1.html
+//
 
 package main
 
@@ -12,28 +14,28 @@ import (
 
 type Data struct {
 	Message, Chat string
+	x             []string
 	//Chat    string
 }
 
 //The main function begins with a call to http.HandleFunc, which tells the http package to handle all requests to the web root ("/") with handler.
 func templateHandler(w http.ResponseWriter, r *http.Request) {
 
-	r.ParseForm()
+	r.ParseForm() //needed to parse message to print out in console
 
 	x := r.Form["usermsg"]
-	fmt.Println(x)
-	r.Form["chatbox"] = x
+
+	//r.Form["chatbox"] = x
+
+	//fmt.Fprintf(w, "Hello, %s!", r.Form["usermsg"])
+	fmt.Println("jbh", x)
+	//fmt.fprintf(w, &x)
 
 	m := Data{Message: "Eliza robot chat", Chat: "user:"}
 
 	t, _ := template.ParseFiles("guess.html")
 
-	//print to console the input value from the user input
-
 	t.Execute(w, &m)
-
-	fmt.Println(r.Form)
-	fmt.Println(r.Form["usermsg"])
 
 }
 
