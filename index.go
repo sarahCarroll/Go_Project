@@ -88,7 +88,7 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 
 	m := Data{Message: "Eliza Robot Chat", Chat: "   " + chatter, Flag: "" + flagit}
 
-	t, _ := template.ParseFiles("dadguess.html")
+	t, _ := template.ParseFiles("guess.html")
 
 	t.Execute(w, &m)
 
