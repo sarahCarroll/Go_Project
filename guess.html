@@ -70,17 +70,18 @@ https://codepen.io/lilgreenland/pen/pyVvqB
  
 <div id="wrapper">
     <div id="menu">
-        <p class="welcome"><h2>{{.Message}}</h2></p>
+        <p class="welcome"><h2>{{.Message}}</h2><br><h3>G00330821</h3></p>
         <!--<p class="logout"><a id="exit" href="#">Exit Chat</a></p>
         <div style="clear:both"></div>-->
     </div>
      
          <div id="chatbox">
-              <p>{{.Chat}} </p>
+              <p><b>{{.Chat}}</b></p>
         </div>
      
-        <form action="" method="">
-            <input name="usermsg" type="text" id="usermsg" size="63" value="Hi there! Type here to talk to me." />
+        <form action="" method="POST">
+            <input name="usermsg" type="text" id="usermsg" size="63" placeholder="Hi there! Type here to talk to me." />
+			<input name="flag" type="hidden" id="flag" value="{{.Flag}}">
             <input name="submitmsg" type="submit"  id="submitmsg" value="Send" />
         </form>
 
