@@ -1,6 +1,12 @@
-//Author- Sarah Carroll
+// Author     - Sarah Carroll
+// Student ID - G00330821
+
+// References
+//-----------
 // https://golang.org/doc/articles/wiki/
-//https://astaxie.gitbooks.io/build-web-application-with-golang/en/04.1.html
+// https://astaxie.gitbooks.io/build-web-application-with-golang/en/04.1.html
+//https://stackoverflow.com/questions/16841320/an-html-tag-other-than-a-textarea-where-n-is-correctly-interpreted
+//https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_type_hidden
 //
 
 package main
@@ -8,12 +14,10 @@ package main
 //To use the net/http package, it must be imported
 import (
 	"fmt"
-	"math/rand"
-	"regexp"
-	"time"
-	//	"html"
 	"html/template"
+	"math/rand"
 	"net/http"
+	"regexp"
 )
 
 var responses = []string{
@@ -22,7 +26,8 @@ var responses = []string{
 	"Why do you say that?",
 }
 
-var chatter string
+var chatter, name string
+var firstime int = 1
 
 type Data struct {
 	Message, Chat, Flag string
@@ -46,47 +51,52 @@ func ElizaResponse(input string) string {
 
 }
 
-//The main function begins with a call to http.HandleFunc, which tells the http package to handle all requests to the web root ("/") with handler.
+//The main function begins with a call to http.HandleFunc, which tells the http package to handle all requests to the web root ("/") with this handler.
 
 func templateHandler(w http.ResponseWriter, r *http.Request) {
 
-	var z, name, flagit, resp string
+	var z, flagit, resp string
 
 	r.ParseForm() //needed to parse message to print out in console
 	x := r.Form["usermsg"]
 	flag := r.Form["flag"]
 
 	if len(x) > 0 {
-		fmt.Println("User Input", x)
+		fmt.Println("User Input: ", x)
+		fmt.Println("Flag[0]   : ", flag[0])
+		fmt.Println("Name      : ", name)
+		fmt.Println("Chat      : ", chatter)
 
 		// build logic here to interpret question and set z appropriately
+
 		// flag = 1 on initial query
 		if flag[0] == "1" {
 			name = x[0]
-			z = chatter + "Hello " + name + "! What is your query?"
+			z = "Eliza: Hello " + name + "!\nWhat is your query?\n\n"
+			chatter += z // save conversation to date
 			flagit = "2"
-		}
-
-		if flag[0] == "2" {
-			rand.Seed(time.Now().UTC().UnixNano())
-			//fmt.Println("User Input:", x[0])
-			//fmt.Println(x)
-			//difficulty tryint to get array to be matched with elizas "father"
-
+		} else {
+			//	flag = 2 on subsequent queries
 			resp = ElizaResponse(x[0])
-			fmt.Println(resp)
-			z = chatter + "Eliza:" + resp
-			fmt.Println()
-			flagit = "2"
+			z = name + ": " + x[0] + "?\nEliza: " + resp + "\n\n"
+
+			// z + = ElizaResponse(x[0]) + "\n\n"
+
+			chatter += z // save conversation to date
+			flagit = "2" // ensure flag remains at 2
 		}
 	} else {
-		z = "Welcome, what is your name?      "
-		flagit = "1"
+		if firstime == 1 {
+			z = "Eliza: Welcome, what is your name?\n\n"
+			chatter = z // save conversation to date
+			flagit = "1"
+			firstime = 0
+		}
 	}
 
-	chatter = z // save conversation to date
+	//fmt.Println("Chat      : ", chatter)
 
-	m := Data{Message: "Eliza Robot Chat", Chat: "   " + chatter, Flag: "" + flagit}
+	m := Data{Message: "Eliza Robot Chat", Chat: "" + chatter, Flag: "" + flagit}
 
 	t, _ := template.ParseFiles("guess.html")
 

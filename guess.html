@@ -49,7 +49,8 @@ https://codepen.io/lilgreenland/pen/pyVvqB
       height:270px;
       width:430px;
       border:1px solid #ACD8F0;
-      overflow:auto; }
+      overflow:auto; 
+	  white-space: pre-wrap;} /*wrap when hits the end of line or on \n*/
     
   #usermsg {
       width:395px;
@@ -81,7 +82,7 @@ https://codepen.io/lilgreenland/pen/pyVvqB
      
         <form action="" method="POST">
             <input name="usermsg" type="text" id="usermsg" size="63" placeholder="Hi there! Type here to talk to me." />
-			<input name="flag" type="hidden" id="flag" value="{{.Flag}}">
+			<input name="flag" type="hidden" id="flag" value="{{.Flag}}" autofocus/>
             <input name="submitmsg" type="submit"  id="submitmsg" value="Send" />
         </form>
 
