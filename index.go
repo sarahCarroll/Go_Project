@@ -77,8 +77,10 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 			flagit = "2"
 		} else {
 			//	flag = 2 on subsequent queries
-			resp = ElizaResponse(x[0])
-			z = name + ": " + x[0] + "?\nEliza: " + resp + "\n\n"
+			if len(x[0]) > 0 {
+				resp = ElizaResponse(x[0])
+				z = name + ": " + x[0] + "\nEliza: " + resp + "\n\n"
+			}
 
 			// z + = ElizaResponse(x[0]) + "\n\n"
 
@@ -86,6 +88,7 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 			flagit = "2" // ensure flag remains at 2
 		}
 	} else {
+		//set global flag to 0 at to so only goes through the flag once
 		if firstime == 1 {
 			z = "Eliza: Welcome, what is your name?\n\n"
 			chatter = z // save conversation to date
