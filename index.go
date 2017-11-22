@@ -42,10 +42,24 @@ func ElizaResponse(input string) string {
 
 	}
 
+	if matched, _ := regexp.MatchString(`(?i).*\bmother\b.*`, input); matched {
+		//match string
+
+		return "Whats your mothers maiden name?"
+
+	}
+
+	if matched, _ := regexp.MatchString(`(?i).*\bbrother\b.*`, input); matched {
+		//match string
+
+		return "Does your brother annoy you too?"
+
+	}
+
 	re := regexp.MustCompile(`(?i)I am ([^.?!]*)[.?!]?`)
 	if matched := re.MatchString(input); matched {
 		return re.ReplaceAllString(input, "How do you know you are $1?")
-	}
+	})
 
 	boundaries := regexp.MustCompile(`\b`)
 	tokens := boundaries.Split(input, -1)
