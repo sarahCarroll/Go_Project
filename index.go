@@ -75,7 +75,7 @@ func ElizaResponse(input string) string {
 	if matched := re.MatchString(input); matched {
 		return re.ReplaceAllString(input, "How do you know you are $1?")
 	}
-
+	//return the response
 	return responses[rand.Intn(len(responses))]
 
 }
