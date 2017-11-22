@@ -18,7 +18,36 @@ import (
 	"math/rand"
 	"net/http"
 	"regexp"
+	"strings"
 )
+
+func Reflect(input string) string {
+	// Split the input on word boundaries.
+	boundaries := regexp.MustCompile(`\b`)
+	tokens := boundaries.Split(input, -1)
+
+	// List the reflections.
+	reflections := [][]string{
+		{`I`, `you`},
+		{`me`, `you`},
+		{`you`, `me`},
+		{`my`, `your`},
+		{`your`, `my`},
+	}
+
+	// Loop through each token, reflecting it if there's a match.
+	for i, token := range tokens {
+		for _, reflection := range reflections {
+			if matched, _ := regexp.MatchString(reflection[0], token); matched {
+				tokens[i] = reflection[1]
+				break
+			}
+		}
+	}
+
+	// Put the tokens back together.
+	return strings.Join(tokens, ``)
+}
 
 var responses = []string{
 	"I’m not sure what you’re trying to say. Could you explain it to me?",
@@ -55,7 +84,7 @@ func ElizaResponse(input string) string {
 
 func templateHandler(w http.ResponseWriter, r *http.Request) {
 
-	var z, flagit, resp string
+	var z, flagit, resp, ans string
 
 	r.ParseForm() //needed to parse message to print out in console
 	x := r.Form["usermsg"]
@@ -79,7 +108,10 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 			//	flag = 2 on subsequent queries
 			if len(x[0]) > 0 {
 				resp = ElizaResponse(x[0])
+				ans = Reflect(x[0])
+				fmt.Println(Reflect("You are my friend."))
 				z = name + ": " + x[0] + "\nEliza: " + resp + "\n\n"
+				z = name + ": " + x[0] + "\nEliza: " + ans + "\n\n"
 			}
 
 			// z + = ElizaResponse(x[0]) + "\n\n"
