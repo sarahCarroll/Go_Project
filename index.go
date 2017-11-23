@@ -18,7 +18,36 @@ import (
 	"math/rand"
 	"net/http"
 	"regexp"
+	"strings"
 )
+
+func Reflect(input string) string {
+	// Split the input on word boundaries.
+	boundaries := regexp.MustCompile(`\b`)
+	tokens := boundaries.Split(input, -1)
+
+	// List the reflections.
+	reflections := [][]string{
+		{`I`, `you`},
+		{`me`, `you`},
+		{`you`, `me`},
+		{`my`, `your`},
+		{`your`, `my`},
+	}
+
+	// Loop through each token, reflecting it if there's a match.
+	for i, token := range tokens {
+		for _, reflection := range reflections {
+			if matched, _ := regexp.MatchString(reflection[0], token); matched {
+				tokens[i] = reflection[1]
+				break
+			}
+		}
+	}
+
+	// Put the tokens back together.
+	return strings.Join(tokens, ``)
+}
 
 var responses = []string{
 	"I’m not sure what you’re trying to say. Could you explain it to me?",
@@ -42,11 +71,40 @@ func ElizaResponse(input string) string {
 
 	}
 
+	if matched, _ := regexp.MatchString(`(?i).*\bmother\b.*`, input); matched {
+		//match string
+
+		return "Whats your mothers maiden name?"
+
+	}
+
+	if matched, _ := regexp.MatchString(`(?i).*\bbrother\b.*`, input); matched {
+		//match string
+
+		return "Does your brother annoy you too?"
+
+	}
+
 	re := regexp.MustCompile(`(?i)I am ([^.?!]*)[.?!]?`)
 	if matched := re.MatchString(input); matched {
 		return re.ReplaceAllString(input, "How do you know you are $1?")
 	}
 
+	q := regexp.MustCompile(`(?i).*\bhi|hello\b.*([^.?!]*)[.?!]?`)
+	if matched := q.MatchString(input); matched {
+		return q.ReplaceAllString(input, "hello "+name)
+	}
+
+	qs := regexp.MustCompile(`(?i).*\bbye|goodbye\b.*([^.?!]*)[.?!]?`)
+	if matched := qs.MatchString(input); matched {
+		return qs.ReplaceAllString(input, "GoodBye "+name+" have a good day")
+	}
+
+	// List the reflections.
+
+	// Put the tokens back together.
+
+	//return the response
 	return responses[rand.Intn(len(responses))]
 
 }
@@ -55,7 +113,7 @@ func ElizaResponse(input string) string {
 
 func templateHandler(w http.ResponseWriter, r *http.Request) {
 
-	var z, flagit, resp string
+	var z, flagit, resp, ans string
 
 	r.ParseForm() //needed to parse message to print out in console
 	x := r.Form["usermsg"]
@@ -78,7 +136,10 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			//	flag = 2 on subsequent queries
 			if len(x[0]) > 0 {
-				resp = ElizaResponse(x[0])
+				ans = Reflect(x[0])
+				fmt.Println(ans)
+				resp = ElizaResponse(ans)
+				//fmt.Println(Reflect("You are my friend."))
 				z = name + ": " + x[0] + "\nEliza: " + resp + "\n\n"
 			}
 
@@ -111,5 +172,9 @@ func main() {
 
 	//call handler function
 	http.HandleFunc("/", templateHandler)
+
+	fs := http.FileServer(http.Dir(""))
+	http.Handle("/user-input", fs)
+
 	http.ListenAndServe(":8080", nil)
 }
