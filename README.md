@@ -4,8 +4,11 @@ Project [Eliza] (https://data-representation.github.io/problems/project.html)
 
 ## Getting Started
 *Git clone https://github.com/sarahCarroll/Go_Project.git*
+
 *go to location in command prompt*
+
 *go run index.go*
+
 *open browser and serve local host on port 8080*
 
 
