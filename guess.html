@@ -94,6 +94,18 @@ https://codepen.io/lilgreenland/pen/pyVvqB
         //it works :)
         document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
     });
+<<<<<<< HEAD
+=======
+
+    $("#usermsg").submit(
+        function(event) {
+          event.preventDefault();
+          $.get('/user-input', { value: $('#usermsg').val() } )
+            .done(function (data) {
+              $('#chatbox').val(data);
+            })
+    });
+>>>>>>> f281547ab0bad6608d66cc93a58eef9d58138135
     
 </script>
 </body>

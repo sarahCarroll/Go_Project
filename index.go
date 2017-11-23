@@ -7,7 +7,9 @@
 // https://astaxie.gitbooks.io/build-web-application-with-golang/en/04.1.html
 //https://stackoverflow.com/questions/16841320/an-html-tag-other-than-a-textarea-where-n-is-correctly-interpreted
 //https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_type_hidden
-//
+//https://golang.org/pkg/regexp/syntax/
+//https://stackoverflow.com/questions/7303948/how-to-auto-scroll-to-end-of-div-when-data-is-added
+//https://www.icewarp.com/support/online_help/203030104.htm
 
 package main
 
@@ -55,6 +57,43 @@ var responses = []string{
 	"Why do you say that?",
 }
 
+func Reflect(input string) string {
+	// Split the input on word boundaries.
+	boundaries := regexp.MustCompile(`\b`)
+	tokens := boundaries.Split(input, -1)
+
+	// List the reflections.
+	reflections := [][]string{
+		{`I`, `you`},
+		{`me`, `you`},
+		{`yourself`, `myself`},
+		{`you`, `me`},
+		{`myself`, `yourself`},
+		{`my`, `your`},
+		{`your`, `my`},
+		{`am`, `are`},
+		{`your`, `my`},
+		{`me`, `you`},
+		{`i`, `you`},
+		{`you`, `I`},
+		{`my`, `your`},
+		{`i'm`, `you are`},
+	}
+
+	// Loop through each token, reflecting it if there's a match.
+	for i, token := range tokens {
+		for _, reflection := range reflections {
+			if matched, _ := regexp.MatchString(reflection[0], token); matched {
+				tokens[i] = reflection[1]
+				break
+			}
+		}
+	}
+
+	// Put the tokens back together.
+	return strings.Join(tokens, ``)
+}
+
 var chatter, name string
 var firstime int = 1
 
@@ -90,6 +129,14 @@ func ElizaResponse(input string) string {
 		return re.ReplaceAllString(input, "How do you know you are $1?")
 	}
 
+<<<<<<< HEAD
+=======
+	s := regexp.MustCompile(`(?i).*\byou are\b.*([^.?!]*)[.?!]?`)
+	if matched := s.MatchString(input); matched {
+		return s.ReplaceAllString(input, "Thanks,You are too!")
+	}
+
+>>>>>>> f281547ab0bad6608d66cc93a58eef9d58138135
 	q := regexp.MustCompile(`(?i).*\bhi|hello\b.*([^.?!]*)[.?!]?`)
 	if matched := q.MatchString(input); matched {
 		return q.ReplaceAllString(input, "hello "+name)
@@ -100,8 +147,11 @@ func ElizaResponse(input string) string {
 		return qs.ReplaceAllString(input, "GoodBye "+name+" have a good day")
 	}
 
+<<<<<<< HEAD
 	// List the reflections.
 
+=======
+>>>>>>> f281547ab0bad6608d66cc93a58eef9d58138135
 	// Put the tokens back together.
 
 	//return the response
@@ -137,7 +187,10 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 			//	flag = 2 on subsequent queries
 			if len(x[0]) > 0 {
 				ans = Reflect(x[0])
+<<<<<<< HEAD
 				fmt.Println(ans)
+=======
+>>>>>>> f281547ab0bad6608d66cc93a58eef9d58138135
 				resp = ElizaResponse(ans)
 				//fmt.Println(Reflect("You are my friend."))
 				z = name + ": " + x[0] + "\nEliza: " + resp + "\n\n"
