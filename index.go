@@ -58,6 +58,8 @@ var responses = []string{
 }
 
 var chatter, name string
+
+//first time marker asks for the user name , used there after in code.
 var firstime int = 1
 
 type Data struct {
@@ -122,6 +124,7 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 	flag := r.Form["flag"]
 
 	if len(x) > 0 {
+		//tests in console
 		fmt.Println("User Input: ", x)
 		fmt.Println("Flag[0]   : ", flag[0])
 		fmt.Println("Name      : ", name)

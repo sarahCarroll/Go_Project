@@ -81,6 +81,7 @@ https://codepen.io/lilgreenland/pen/pyVvqB
         </div>
      
         <form action="" method="POST">
+            <!--hidden flag is used as marker for the stage of the conversation-->
             <input name="usermsg" type="text" id="usermsg" size="63" placeholder="Hi there! Type here to talk to me." />
 			<input name="flag" type="hidden" id="flag" value="{{.Flag}}" autofocus/>
             <input name="submitmsg" type="submit"  id="submitmsg" value="Send" />
@@ -91,19 +92,20 @@ https://codepen.io/lilgreenland/pen/pyVvqB
 <script type="text/javascript">
 // jQuery Document
     $(document).ready(function(){
-        //it works :)
+        //follows conversation
         document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
     });
 
 
-    $("#usermsg").submit(
+    //ajax attemp, needs more work
+    /*$("#usermsg").submit(
         function(event) {
           event.preventDefault();
           $.get('/user-input', { value: $('#usermsg').val() } )
             .done(function (data) {
               $('#chatbox').val(data);
             })
-    });
+    });*/
     
 </script>
 </body>
